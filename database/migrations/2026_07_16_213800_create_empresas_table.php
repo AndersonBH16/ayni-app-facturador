@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        chema::create('empresas', function (Blueprint $table) {
+        Schema::create('empresas', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('ruc', 11)->unique();
             $table->string('razon_social');
