@@ -28,11 +28,16 @@ class Cliente extends Model
 
     public function portalUsuarios()
     {
-        return $this->hasMany(PortalUsuario::class);
+        return $this->belongsToMany(PortalUsuario::class, 'cliente_portal_usuario');
     }
 
     public function esEspecial(): bool
     {
         return $this->tipo_cliente === 'especial';
+    }
+
+    public function carrito()
+    {
+        return $this->hasOne(Carrito::class);
     }
 }

@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('portal_usuarios', function (Blueprint $table) {
+        Schema::create('carritos', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->boolean('activo')->default(true);
-            $table->rememberToken();
+            $table->foreignUuid('empresa_id')->constrained('empresas')->cascadeOnDelete();
+            $table->foreignUuid('cliente_id')->unique()->constrained('clientes')->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('portal_usuarios');
+        Schema::dropIfExists('carritos');
     }
 };

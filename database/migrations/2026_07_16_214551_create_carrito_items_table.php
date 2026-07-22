@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('lista_precio_items', function (Blueprint $table) {
+        Schema::create('carrito_items', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('lista_precio_id')->constrained('listas_precio')->cascadeOnDelete();
+            $table->foreignUuid('carrito_id')->constrained('carritos')->cascadeOnDelete();
             $table->foreignUuid('oferta_producto_id')->constrained('ofertas_producto')->cascadeOnDelete();
-            $table->decimal('precio', 12, 2);
+            $table->unsignedInteger('cantidad')->default(1);
             $table->timestamps();
 
-            $table->unique(['lista_precio_id', 'oferta_producto_id']);
+            $table->unique(['carrito_id', 'oferta_producto_id']);
         });
     }
 
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('lista_precio_items');
+        Schema::dropIfExists('carrito_items');
     }
 };

@@ -6,29 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('productos', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('empresa_id')->constrained('empresas')->cascadeOnDelete();
-            $table->string('sku');
+            $table->foreignUuid('categoria_id')->nullable()->constrained('categorias')->nullOnDelete();
+            $table->string('sku')->nullable();
             $table->string('nombre');
             $table->text('descripcion')->nullable();
-            $table->decimal('precio_base', 12, 2);
-            $table->string('unidad_medida')->default('NIU'); // catálogo 03 SUNAT
+            $table->string('imagen')->nullable();
+            $table->string('unidad_medida')->default('NIU');
             $table->boolean('activo')->default(true);
             $table->timestamps();
-
-            $table->unique(['empresa_id', 'sku']);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('productos');

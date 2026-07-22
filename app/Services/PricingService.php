@@ -3,21 +3,14 @@
 namespace App\Services;
 
 use App\Models\Cliente;
-use App\Models\Producto;
+use App\Models\OfertaProducto;
 
-/**
- * Resuelve el precio final que debe ver un cliente para un producto:
- *
- * 1. Si el cliente es 'general' -> siempre precio_base.
- * 2. Si el cliente es 'especial' y tiene lista_precio asignada ->
- *    busca el producto en esa lista; si no está, cae a precio_base.
- */
 class PricingService
 {
-    public function precioParaCliente(Producto $producto, Cliente $cliente): float
+    public function precioParaCliente(OfertaProducto $oferta, Cliente $cliente): float
     {
         if ($cliente->esEspecial() && $cliente->lista_precio_id) {
-            $item = $producto->listaPrecioItems()
+            $item = $oferta->listaPrecioItems()
                 ->where('lista_precio_id', $cliente->lista_precio_id)
                 ->first();
 
@@ -26,6 +19,6 @@ class PricingService
             }
         }
 
-        return (float) $producto->precio_base;
+        return (float) $oferta->precio_base;
     }
 }
