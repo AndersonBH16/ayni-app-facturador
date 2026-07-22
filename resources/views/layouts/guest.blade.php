@@ -7,18 +7,29 @@
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
-        <!-- Fonts -->
+        <script>
+            (function () {
+                const stored = localStorage.getItem('theme');
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if (stored === 'dark' || (!stored && prefersDark)) {
+                    document.documentElement.classList.add('dark');
+                }
+            })();
+        </script>
+
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-        <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-        <!-- Styles -->
         @livewireStyles
     </head>
     <body>
-        <div class="font-sans text-gray-900 antialiased">
+        <div class="font-sans text-gray-900 dark:text-gray-100 antialiased">
+            <div class="fixed top-4 right-4 z-10">
+                <x-theme-toggle />
+            </div>
+
             {{ $slot }}
         </div>
 
