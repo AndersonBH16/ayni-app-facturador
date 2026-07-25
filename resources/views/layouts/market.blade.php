@@ -26,22 +26,29 @@
 </head>
 <body class="font-sans text-gray-900 dark:text-gray-100 antialiased bg-white dark:bg-brand-black transition-colors">
 <header class="border-b border-gray-100 dark:border-gray-700 px-4 py-3 flex items-center justify-between">
-    <a href="{{ route('storefront.catalogo') }}" wire:navigate class="flex items-center gap-2">
+    <a href="{{ route('market.catalogo') }}" wire:navigate class="flex items-center gap-2">
         <img src="{{ asset('images/ayni.jpg') }}" alt="Ayni Mikhuna" class="h-8 w-auto">
     </a>
 
     <div class="flex items-center gap-4">
         <x-theme-toggle />
 
-        <livewire:storefront.carrito-indicador />
+        <livewire:market.carrito-indicador />
 
-        @auth('portal')
-            <form method="POST" action="{{ route('portal.logout') }}">
+        @auth('market')
+            <form method="POST" action="{{ route('market.logout') }}">
                 @csrf
                 <button type="submit" class="text-sm text-gray-500 hover:text-brand-teal">Cerrar sesión</button>
             </form>
+        @elseif (auth('web')->check() && auth('web')->user()->hasRole('superadmin'))
+            <form method="POST" action="{{ route('market.entrar-maestro') }}">
+                @csrf
+                <button type="submit" class="text-xs bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200 px-3 py-1.5 rounded-full font-medium hover:bg-amber-200 dark:hover:bg-amber-800">
+                    Modo admin: entrar como comprador de prueba
+                </button>
+            </form>
         @else
-            <a href="{{ route('portal.login') }}" wire:navigate class="text-sm text-gray-500 hover:text-brand-teal">Iniciar sesión</a>
+            <a href="{{ route('market.login') }}" wire:navigate class="text-sm text-gray-500 hover:text-brand-teal">Iniciar sesión</a>
         @endauth
     </div>
 </header>

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Storefront;
+namespace App\Livewire\Market;
 
 use App\Models\Carrito;
 use Illuminate\Support\Facades\Auth;
@@ -19,15 +19,15 @@ class CarritoIndicador extends Component
     #[On('carrito-actualizado')]
     public function actualizarCantidad(): void
     {
-        $portalUsuario = Auth::guard('portal')->user();
+        $marketUsuario = Auth::guard('market')->user();
 
-        if (! $portalUsuario) {
+        if (! $marketUsuario) {
             $this->cantidad = 0;
             return;
         }
 
         $carritos = Carrito::withoutGlobalScopes()
-            ->whereIn('cliente_id', $portalUsuario->clientes->pluck('id'))
+            ->whereIn('cliente_id', $marketUsuario->clientes->pluck('id'))
             ->with('items')
             ->get();
 
@@ -36,6 +36,6 @@ class CarritoIndicador extends Component
 
     public function render()
     {
-        return view('livewire.storefront.carrito-indicador');
+        return view('livewire.market.carrito-indicador');
     }
 }

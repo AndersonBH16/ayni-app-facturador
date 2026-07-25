@@ -1,9 +1,9 @@
 <?php
 
-use App\Livewire\Storefront\Catalogo;
+use App\Livewire\Market\Catalogo;
+use App\Livewire\Market\{Registro, Login as MarketLogin};
+use App\Livewire\Market\VerProducto;
 use Illuminate\Support\Facades\Route;
-use App\Livewire\Storefront\{Registro, Login as PortalLogin};
-use App\Livewire\Storefront\VerProducto;
 
 Route::get('/', function () {
     return redirect()->route(auth()->check() ? 'dashboard' : 'login');
@@ -19,17 +19,28 @@ Route::middleware([
     })->name('dashboard');
 });
 
-Route::get('/tienda', Catalogo::class)->name('storefront.catalogo');
+Route::get('/market', Catalogo::class)->name('market.catalogo');
 
-Route::middleware('guest:portal')->group(function () {
-    Route::get('/tienda/registro', Registro::class)->name('portal.registro');
-    Route::get('/tienda/login', PortalLogin::class)->name('portal.login');
+Route::middleware('guest:market')->group(function () {
+    Route::get('/market/registro', Registro::class)->name('market.registro');
+    Route::get('/market/login', MarketLogin::class)->name('market.login');
 });
 
-Route::post('/tienda/logout', function () {
-    auth('portal')->logout();
+Route::post('/market/logout', function () {
+    auth('market')->logout();
     request()->session()->invalidate();
-    return redirect()->route('storefront.catalogo');
-})->middleware('auth:portal')->name('portal.logout');
+    return redirect()->route('market.catalogo');
+})->middleware('auth:market')->name('market.logout');
 
-Route::get('/tienda/producto/{producto}', VerProducto::class)->name('storefront.producto');
+Route::get('/market/producto/{producto}', VerProducto::class)->name('market.producto');
+
+Route::middleware('auth:web')->post('/market/entrar-como-maestro', function () {
+    if (! auth('web')->user()->hasRole('superadmin')) {
+        abort(403);
+    }
+
+    $maestro = \App\Models\MarketUsuario::where('email', 'maestro@demo.test')->firstOrFail();
+    auth('market')->login($maestro);
+
+    return redirect()->route('market.catalogo');
+})->name('market.entrar-maestro');

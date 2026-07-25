@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Storefront;
+namespace App\Livewire\Market;
 
 use App\Models\Carrito;
 use App\Models\Cliente;
@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
-#[Layout('layouts.storefront')]
+#[Layout('layouts.market')]
 class VerProducto extends Component
 {
     public Producto $producto;
@@ -29,15 +29,15 @@ class VerProducto extends Component
 
     public function agregarAlCarrito(string $ofertaId): void
     {
-        if (! Auth::guard('portal')->check()) {
+        if (! Auth::guard('market')->check()) {
             $this->redirect(route('portal.login'), navigate: true);
             return;
         }
 
-        $portalUsuario = Auth::guard('portal')->user();
+        $marketUsuario = Auth::guard('market')->user();
         $oferta = OfertaProducto::withoutGlobalScopes()->findOrFail($ofertaId);
 
-        $cliente = $portalUsuario->clientes()->where('empresa_id', $oferta->empresa_id)->first();
+        $cliente = $marketUsuario->clientes()->where('empresa_id', $oferta->empresa_id)->first();
 
         if (! $cliente) {
             $this->ofertaPendienteId = $ofertaId;
@@ -56,7 +56,7 @@ class VerProducto extends Component
         ]);
 
         $oferta = OfertaProducto::withoutGlobalScopes()->findOrFail($this->ofertaPendienteId);
-        $portalUsuario = Auth::guard('portal')->user();
+        $marketUsuario = Auth::guard('market')->user();
 
         $cliente = Cliente::create([
             'empresa_id' => $oferta->empresa_id,
@@ -66,7 +66,7 @@ class VerProducto extends Component
             'razon_social' => $this->razonSocialInput,
         ]);
 
-        $portalUsuario->clientes()->attach($cliente->id);
+        $marketUsuario->clientes()->attach($cliente->id);
 
         $this->agregarConCliente($oferta, $cliente);
 
@@ -98,7 +98,7 @@ class VerProducto extends Component
 
     public function render()
     {
-        $portalUsuario = Auth::guard('portal')->user();
+        $marketUsuario = Auth::guard('market')->user();
         $pricing = app(PricingService::class);
 
         $ofertas = OfertaProducto::withoutGlobalScopes()
@@ -107,12 +107,12 @@ class VerProducto extends Component
             ->with('empresa')
             ->orderBy('precio_base')
             ->get()
-            ->map(function ($oferta) use ($portalUsuario, $pricing) {
-                $cliente = $portalUsuario?->clientes->firstWhere('empresa_id', $oferta->empresa_id);
+            ->map(function ($oferta) use ($marketUsuario, $pricing) {
+                $cliente = $marketUsuario?->clientes->firstWhere('empresa_id', $oferta->empresa_id);
                 $oferta->precio_mostrado = $cliente ? $pricing->precioParaCliente($oferta, $cliente) : $oferta->precio_base;
                 return $oferta;
             });
 
-        return view('livewire.storefront.ver-producto', ['ofertas' => $ofertas]);
+        return view('livewire.market.ver-producto', ['ofertas' => $ofertas]);
     }
 }

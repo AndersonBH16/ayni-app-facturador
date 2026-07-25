@@ -42,9 +42,9 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
-        'portal' => [
+        'market' => [
             'driver' => 'session',
-            'provider' => 'portal_usuarios',
+            'provider' => 'market_usuarios',
         ],
     ],
 
@@ -68,17 +68,12 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', User::class),
+            'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
-        'portal_usuarios' => [
+        'market_usuarios' => [
             'driver' => 'eloquent',
-            'model' => App\Models\PortalUsuario::class,
+            'model' => App\Models\MarketUsuario::class,
         ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
     ],
 
     /*

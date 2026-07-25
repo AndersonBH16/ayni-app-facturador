@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Storefront;
+namespace App\Livewire\Market;
 
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
@@ -20,16 +20,16 @@ class Login extends Component
             'password' => ['required'],
         ]);
 
-        if (! Auth::guard('portal')->attempt(['email' => $this->email, 'password' => $this->password])) {
+        if (! Auth::guard('market')->attempt(['email' => $this->email, 'password' => $this->password])) {
             $this->error = 'Credenciales incorrectas.';
             return;
         }
 
-        $this->redirect(route('storefront.catalogo'), navigate: true);
+        $this->redirect(route('market.catalogo'), navigate: true);
     }
 
     public function render()
     {
-        return view('livewire.storefront.login');
+        return view('livewire.market.login');
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Livewire\Storefront;
+namespace App\Livewire\Market;
 
-use App\Models\PortalUsuario;
+use App\Models\MarketUsuario;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\Layout;
@@ -29,20 +29,20 @@ class Registro extends Component
     {
         $this->validate();
 
-        $portalUsuario = PortalUsuario::create([
+        $marketUsuario = MarketUsuario::create([
             'name' => $this->name,
             'email' => $this->email,
             'password' => Hash::make($this->password),
             'activo' => true,
         ]);
 
-        Auth::guard('portal')->login($portalUsuario);
+        Auth::guard('market')->login($marketUsuario);
 
-        $this->redirect(route('storefront.catalogo'), navigate: true);
+        $this->redirect(route('market.catalogo'), navigate: true);
     }
 
     public function render()
     {
-        return view('livewire.storefront.registro');
+        return view('livewire.market.registro');
     }
 }

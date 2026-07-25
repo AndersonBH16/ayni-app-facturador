@@ -7,6 +7,7 @@ use App\Models\Cliente;
 use App\Models\Empresa;
 use App\Models\ListaPrecio;
 use App\Models\ListaPrecioItem;
+use App\Models\MarketUsuario;
 use App\Models\OfertaProducto;
 use App\Models\Producto;
 use App\Models\Rubro;
@@ -14,6 +15,7 @@ use App\Models\Sucursal;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
+use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
@@ -114,5 +116,16 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->command->info('Datos de prueba creados. Usuario: admin@demo.test');
+
+        Role::firstOrCreate(['name' => 'superadmin', 'guard_name' => 'web']);
+        $admin = User::where('email', 'admin@demo.test')->first();
+        $admin->assignRole('superadmin');
+
+        // Un comprador de prueba, ya vinculado a ambas empresas, para testear sin fricción
+        $maestro = MarketUsuario::factory()->create([
+            'name' => 'Comprador Maestro',
+            'email' => 'maestro@demo.test',
+        ]);
+        $maestro->clientes()->attach(\App\Models\Cliente::withoutGlobalScopes()->pluck('id'));
     }
 }

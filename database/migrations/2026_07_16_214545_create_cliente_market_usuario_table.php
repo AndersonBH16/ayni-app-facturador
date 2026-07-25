@@ -8,18 +8,17 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('cliente_portal_usuario', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+        Schema::create('cliente_market_usuario', function (Blueprint $table) {
             $table->foreignUuid('cliente_id')->constrained('clientes')->cascadeOnDelete();
-            $table->foreignUuid('portal_usuario_id')->constrained('portal_usuarios')->cascadeOnDelete();
+            $table->foreignUuid('market_usuario_id')->constrained('market_usuarios')->cascadeOnDelete();
             $table->timestamps();
 
-            $table->unique(['cliente_id', 'portal_usuario_id']);
+            $table->primary(['cliente_id', 'market_usuario_id']);
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('cliente_portal_usuario');
+        Schema::dropIfExists('cliente_market_usuario');
     }
 };

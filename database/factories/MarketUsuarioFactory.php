@@ -2,13 +2,13 @@
 
 namespace Database\Factories;
 
-use App\Models\PortalUsuario;
+use App\Models\MarketUsuario;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 
-class PortalUsuarioFactory extends Factory
+class MarketUsuarioFactory extends Factory
 {
-    protected $model = PortalUsuario::class;
+    protected $model = MarketUsuario::class;
 
     public function definition(): array
     {
@@ -16,7 +16,7 @@ class PortalUsuarioFactory extends Factory
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
             'password' => Hash::make('password'),
-            'activo' => true,W
+            'activo' => true,
         ];
     }
 }

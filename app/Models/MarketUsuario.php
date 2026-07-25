@@ -7,11 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 
-class PortalUsuario extends Authenticatable
+class MarketUsuario extends Authenticatable
 {
     use HasUuids, HasRoles, HasFactory;
 
-    protected string $guard_name = 'portal';
+    protected $table = 'market_usuarios';
+
+    protected string $guard_name = 'market';
 
     protected $fillable = ['name', 'email', 'password', 'activo'];
 
@@ -19,6 +21,6 @@ class PortalUsuario extends Authenticatable
 
     public function clientes()
     {
-        return $this->belongsToMany(Cliente::class, 'cliente_portal_usuario');
+        return $this->belongsToMany(Cliente::class, 'cliente_market_usuario');
     }
 }

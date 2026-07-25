@@ -26,9 +26,9 @@ class Cliente extends Model
         return $this->belongsTo(ListaPrecio::class);
     }
 
-    public function portalUsuarios()
+    public function marketUsuarios()
     {
-        return $this->belongsToMany(PortalUsuario::class, 'cliente_portal_usuario');
+        return $this->belongsToMany(MarketUsuario::class, 'cliente_market_usuario');
     }
 
     public function esEspecial(): bool
