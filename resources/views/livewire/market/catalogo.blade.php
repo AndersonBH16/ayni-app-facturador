@@ -77,11 +77,8 @@
                 <div
                     x-data="{ show: false, modal: false }"
                     x-init="new IntersectionObserver(([e]) => { if (e.isIntersecting) show = true }, { threshold: 0.1 }).observe($el)"
-                    x-show="show"
-                    x-transition:enter="transition ease-out duration-300"
-                    x-transition:enter-start="opacity-0 translate-y-4"
-                    x-transition:enter-end="opacity-100 translate-y-0"
-                    class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-lg transition-shadow"
+                    class="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-lg transition-all duration-300"
+                    :class="show ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                 >
                     <button @click="modal = true" class="block w-full aspect-square bg-gray-50 dark:bg-gray-900 overflow-hidden">
                         <img src="{{ $producto->imagen }}" alt="{{ $producto->nombre }}" loading="lazy" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
@@ -93,9 +90,9 @@
 
                         @if ($masBarato)
                             <div class="flex items-center gap-2 mb-1">
-                            <span class="bg-brand-teal text-white text-sm font-bold px-2 py-0.5 rounded-md">
-                                S/ {{ number_format($masBarato->precio_mostrado, 2) }}
-                            </span>
+                <span class="bg-brand-teal text-white text-sm font-bold px-2 py-0.5 rounded-md">
+                    S/ {{ number_format($masBarato->precio_mostrado, 2) }}
+                </span>
                                 <span class="text-xs text-gray-400">{{ $masBarato->empresa->razon_social }}</span>
                             </div>
 
@@ -120,7 +117,7 @@
                         @endif
                     </div>
 
-                    <!-- Modal con todas las ofertas -->
+                    <!-- Modal con todas las ofertas: este SÍ puede usar x-show, porque lo abre un click, no un observer -->
                     <div x-show="modal" x-cloak @click.self="modal = false" @keydown.escape.window="modal = false" class="fixed inset-0 bg-black/60 flex items-center justify-center z-30 px-4">
                         <div x-show="modal" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" class="bg-white dark:bg-gray-800 rounded-xl max-w-lg w-full max-h-[85vh] overflow-y-auto">
                             <div class="aspect-video bg-gray-50 dark:bg-gray-900">

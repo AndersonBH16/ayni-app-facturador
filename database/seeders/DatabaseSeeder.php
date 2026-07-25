@@ -52,7 +52,7 @@ class DatabaseSeeder extends Seeder
             ]));
 
         // 5. Productos (catálogo genérico, sin empresa ni precio)
-        $productos = Producto::factory()->count(20)->create([
+        $productos = Producto::factory()->count(200)->create([
             'categoria_id' => fn () => $categorias->random()->id,
             'imagen' => fn () => 'https://picsum.photos/seed/'.Str::random(8).'/600/600',
         ]);
@@ -68,7 +68,7 @@ class DatabaseSeeder extends Seeder
             'stock_disponible' => fake()->numberBetween(0, 200),
         ]));
 
-        $productos->random(10)->each(function ($producto) use ($empresaB) {
+        $productos->random(80)->each(function ($producto) use ($empresaB) {
             OfertaProducto::create([
                 'empresa_id' => $empresaB->id,
                 'producto_id' => $producto->id,
@@ -79,7 +79,7 @@ class DatabaseSeeder extends Seeder
         });
 
         // 7. Precio especial: asigna precio de mayorista a la mitad de las ofertas de la Empresa A
-        foreach ($ofertasA->random(10) as $oferta) {
+        foreach ($ofertasA->random(30) as $oferta) {
             ListaPrecioItem::factory()->create([
                 'lista_precio_id' => $listaMayoristaA->id,
                 'oferta_producto_id' => $oferta->id,
